@@ -131,19 +131,28 @@ async function run() {
 
         app.get('/orders', async (req, res) => {
             // res.send('Hello World from Orders')
-            const cursor = ordersCollection.find({});
+            let query = {};
+            // console.log(req.query);
+            const email = req.query.email;
+            // const email = req.query.userEmail;
+            if (email) {
+                query = { email: email };
+            }
+            // const cursor = ordersCollection.find({});
+            const cursor = ordersCollection.find(query);
+            console.log(cursor);
             const ordersdata = await cursor.toArray();
             res.send(ordersdata);
         })
 
         // GET API for Orders API 
-        app.get('/orders/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const ordersdata = await ordersCollection.findOne(query);
-            // console.log('load user with id: ', id);
-            res.send(ordersdata);
-        })
+        // app.get('/orders/:id', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const ordersdata = await ordersCollection.findOne(query);
+        //     // console.log('load user with id: ', id);
+        //     res.send(ordersdata);
+        // })
 
         // POST API FOR Add Confirm Orders
         app.post('/orders', async (req, res) => {
