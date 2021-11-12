@@ -34,6 +34,7 @@ async function run() {
         const database = client.db('mustafiz_drone');
         const productsCollection = database.collection('products');
         const usersCollection = database.collection('users');
+        const ordersCollection = database.collection('orders');
 
         /*----------------------------------
           Drone Product API
@@ -120,6 +121,39 @@ async function run() {
             res.json(result);
         })
 
+
+
+        /*----------------------------------
+           Orders  API
+           -------------------------------------*/
+
+        // GET API FOR  COnfirm Order
+
+        app.get('/orders', async (req, res) => {
+            // res.send('Hello World from Orders')
+            const cursor = ordersCollection.find({});
+            const ordersdata = await cursor.toArray();
+            res.send(ordersdata);
+        })
+
+        // GET API for Orders API 
+        app.get('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const ordersdata = await ordersCollection.findOne(query);
+            // console.log('load user with id: ', id);
+            res.send(ordersdata);
+        })
+
+        // POST API FOR Add Confirm Orders
+        app.post('/orders', async (req, res) => {
+            const orders = req.body;
+            console.log('hit the post api', orders);
+
+            const result = await ordersCollection.insertOne(orders);
+            console.log(result);
+            res.json(result)
+        });
 
 
 
