@@ -86,6 +86,7 @@ async function run() {
             res.json({ admin: isAdmin });
         })
 
+        // user registration and google singin save users or bypassing users to mongoDB
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
