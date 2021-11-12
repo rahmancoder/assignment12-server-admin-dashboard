@@ -140,19 +140,19 @@ async function run() {
             }
             // const cursor = ordersCollection.find({});
             const cursor = ordersCollection.find(query);
-            console.log(cursor);
+            // console.log(cursor);
             const ordersdata = await cursor.toArray();
             res.send(ordersdata);
         })
 
         // GET API for Orders API 
-        // app.get('/orders/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: ObjectId(id) };
-        //     const ordersdata = await ordersCollection.findOne(query);
-        //     // console.log('load user with id: ', id);
-        //     res.send(ordersdata);
-        // })
+        app.get('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const ordersdata = await ordersCollection.findOne(query);
+            // console.log('load user with id: ', id);
+            res.send(ordersdata);
+        })
 
         // POST API FOR Add Confirm Orders
         app.post('/orders', async (req, res) => {
@@ -164,6 +164,29 @@ async function run() {
             res.json(result)
         });
 
+        // DELETE Orders
+
+        // app.delete("/orders/:id", async (req, res) => {
+        //     console.log(req.params.id);
+        //     const result = await ordersCollection.deleteOne({
+        //         _id: ObjectId(req.params.id),
+        //     });
+        //     res.send(result);
+        // });
+
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: ObjectId(id) };
+            // const query = { _id: id }
+            // console.log(query);
+            const result = await ordersCollection.deleteOne(query);
+
+            console.log('deleting user with id ', result);
+
+            res.json(result);
+            // res.send(result);
+        })
 
 
 
