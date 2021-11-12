@@ -53,8 +53,11 @@ async function run() {
         app.get('/products/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
+            // const id = req.params.index;
+            // const products = await productsCollection.findOne(id);
+
             const products = await productsCollection.findOne(query);
-            // console.log('load user with id: ', id);
+            console.log('load user with id: ', id);
             res.send(products);
         })
 
@@ -86,7 +89,9 @@ async function run() {
             res.json({ admin: isAdmin });
         })
 
-        // user registration and google singin save users or bypassing users to mongoDB
+        // user registration  and google singin save users or bypassing users to mongoDB
+
+        //1. with email password (POST Method useFirebase)
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
@@ -94,6 +99,8 @@ async function run() {
             res.json(result);
         });
 
+
+        //2.google singin save users (PUT Method useFirebase)
         app.put('/users', async (req, res) => {
             const user = req.body;
             const filter = { email: user.email };
@@ -102,6 +109,16 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             res.json(result);
         });
+
+        // make admin and admin can add another admin api
+        app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+            console.log('put', user);
+            const filter = { email: user.email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        })
 
 
 
