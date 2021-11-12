@@ -34,6 +34,44 @@ async function run() {
         const database = client.db('mustafiz_drone');
         const productsCollection = database.collection('products');
 
+        /*----------------------------------
+          Drone Product API
+         --------------------------------------------*/
+
+
+        // GET API
+
+        app.get('/products', async (req, res) => {
+            // res.send('Hello World from products')
+            const cursor = productsCollection.find({});
+            const productsdata = await cursor.toArray();
+            res.send(productsdata);
+        })
+
+        // GET API FROM Single ID
+        app.get('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const products = await productsCollection.findOne(query);
+            // console.log('load user with id: ', id);
+            res.send(products);
+        })
+
+        // POST API FOR  Add  NEW ProductsList
+
+        app.post('/products', async (req, res) => {
+            const products = req.body;
+            console.log('hit the post api', products);
+
+            const result = await productsCollection.insertOne(products);
+            console.log(result);
+            res.json(result)
+        });
+
+
+
+
+
 
 
 
