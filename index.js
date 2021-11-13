@@ -35,6 +35,7 @@ async function run() {
         const productsCollection = database.collection('products');
         const usersCollection = database.collection('users');
         const ordersCollection = database.collection('orders');
+        const reviewsCollection = database.collection('reviews');
 
         /*----------------------------------
           Drone Product API
@@ -216,7 +217,31 @@ async function run() {
             console.log(result);
         });
 
+        /*----------------------------------
+            Review Comment API
+           --------------------------------------------*/
 
+        // GET API
+
+        app.get('/allreviews', async (req, res) => {
+            // res.send('Hello World from reviews')
+            const cursor = reviewsCollection.find({});
+            const reviewdata = await cursor.toArray();
+            res.send(reviewdata);
+        })
+
+
+
+        // POST API FOR  Add Reviews/Comments
+
+        app.post('/allreviews', async (req, res) => {
+            const comment = req.body;
+            console.log('hit the post api', comment);
+
+            const result = await reviewsCollection.insertOne(comment);
+            console.log(result);
+            res.json(result)
+        });
 
 
 
