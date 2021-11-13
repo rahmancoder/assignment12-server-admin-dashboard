@@ -74,6 +74,21 @@ async function run() {
         });
 
 
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const query = { _id: ObjectId(id) };
+            // const query = { _id: id }
+            // console.log(query);
+            const result = await productsCollection.deleteOne(query);
+
+            console.log('deleting product with id ', result);
+
+            res.json(result);
+            // res.send(result);
+        })
+
+
 
         /*----------------------------------
           USERS API
@@ -182,11 +197,24 @@ async function run() {
             // console.log(query);
             const result = await ordersCollection.deleteOne(query);
 
-            console.log('deleting user with id ', result);
+            console.log('deleting order with id ', result);
 
             res.json(result);
             // res.send(result);
         })
+
+        // Order status update pending to approved
+        app.put("/statusupdate/:id", async (req, res) => {
+            const filter = { _id: ObjectId(req.params.id) };
+            console.log(req.params.id);
+            const result = await ordersCollection.updateOne(filter, {
+                $set: {
+                    status: req.body.status,
+                },
+            });
+            res.send(result);
+            console.log(result);
+        });
 
 
 
